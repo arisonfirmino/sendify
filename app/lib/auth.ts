@@ -8,17 +8,20 @@ export const authOptions: NextAuthOptions = {
     Credentials({
       name: "credentials",
       credentials: {
-        email: { label: "email", type: "text" },
+        emailOrUsername: { label: "Email ou Nome de Usuário", type: "text" },
         password: { label: "password", type: "password" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) {
+        if (!credentials?.emailOrUsername || !credentials.password) {
           throw new Error("Campos não preenchidos.");
         }
 
-        const user = await db.user.findUnique({
+        const user = await db.user.findFirst({
           where: {
-            email: credentials?.email,
+            OR: [
+              { email: credentials.emailOrUsername },
+              { username: credentials.emailOrUsername },
+            ],
           },
         });
 

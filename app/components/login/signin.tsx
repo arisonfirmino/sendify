@@ -9,12 +9,12 @@ import SubmitButton from "./submit-button";
 import { signIn } from "next-auth/react";
 
 const schema = yup.object({
-  email: yup.string().required("Este campo é obrigatório."),
+  emailOrUsername: yup.string().required("Este campo é obrigatório."),
   password: yup.string().required("Este campo é obrigatório."),
 });
 
 interface FormData {
-  email: string;
+  emailOrUsername: string;
   password: string;
 }
 
@@ -35,13 +35,13 @@ export default function SignIn() {
     try {
       const result = await signIn("credentials", {
         redirect: false,
-        email: data.email,
+        emailOrUsername: data.emailOrUsername,
         password: data.password,
       });
 
       if (result?.error) {
         if (result.error === "Usuário não cadastrado.") {
-          setError("email", {
+          setError("emailOrUsername", {
             type: "manual",
             message: "Usuário não cadastrado.",
           });
@@ -70,8 +70,8 @@ export default function SignIn() {
       <Input
         type="text"
         placeholder="Email ou nome de usuário"
-        register={{ ...register("email") }}
-        error={errors.email}
+        register={{ ...register("emailOrUsername") }}
+        error={errors.emailOrUsername}
       />
       <Input
         type="password"
