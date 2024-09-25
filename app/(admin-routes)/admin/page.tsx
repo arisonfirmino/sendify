@@ -1,7 +1,7 @@
 import { authOptions } from "@/app/lib/auth";
 import { db } from "@/app/lib/prisma";
 import { getServerSession } from "next-auth";
-import Sidebar from "@/app/components/sidebar/sidebar";
+import App from "@/app/components/app";
 
 export default async function Admin() {
   const session = await getServerSession(authOptions);
@@ -9,6 +9,26 @@ export default async function Admin() {
   const user = await db.user.findFirst({
     where: {
       id: session?.user.id,
+    },
+    include: {
+      sent_messages: {
+        include: {
+          recipient: true,
+          sender: true,
+        },
+        orderBy: {
+          created_at: "desc",
+        },
+      },
+      received_messages: {
+        include: {
+          recipient: true,
+          sender: true,
+        },
+        orderBy: {
+          created_at: "desc",
+        },
+      },
     },
   });
 
@@ -18,7 +38,7 @@ export default async function Admin() {
 
   return (
     <main>
-      <Sidebar user={user} />
+      <App user={user} />
     </main>
   );
 }

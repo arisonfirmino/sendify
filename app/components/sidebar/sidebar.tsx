@@ -6,9 +6,10 @@ import Nav from "./nav";
 
 interface SidebarProps {
   user: User;
+  setShowForm: () => void;
 }
 
-export default function Sidebar({ user }: SidebarProps) {
+export default function Sidebar({ user, setShowForm }: SidebarProps) {
   return (
     <div className="relative h-fit w-full space-y-5 xl:h-screen xl:max-w-80">
       <div className="px-5 pt-5">
@@ -16,7 +17,7 @@ export default function Sidebar({ user }: SidebarProps) {
       </div>
 
       <div className="px-5">
-        <WriteButton />
+        <WriteButton setShowForm={setShowForm} />
       </div>
 
       <div className="px-5">
